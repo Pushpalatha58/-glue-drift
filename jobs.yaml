@@ -1,0 +1,64 @@
+# jobs.yaml
+# Source-of-truth configuration for AWS Glue jobs.
+# Run: glue-drift check --config jobs.yaml
+
+jobs:
+
+  udp-glue-extract-oracle-kci-to-s3:
+    Name: udp-glue-extract-oracle-kci-to-s3
+    Description: "Extracts data from Oracle KCI environments to S3"
+    Role: arn:aws:iam::526543738687:role/solvaws-prod-da-udp-glue-service-role
+    GlueVersion: "4.0"
+    WorkerType: G.1X
+    NumberOfWorkers: 2
+    Timeout: 120
+    MaxRetries: 0
+    Command:
+      Name: glueetl
+      ScriptLocation: s3://udp-glue-scripts-prod-us-east-2/scripts/extract_oracle_kci.py
+      PythonVersion: "3"
+    DefaultArguments:
+      --enable-metrics: "true"
+      --enable-continuous-cloudwatch-log: "true"
+      --TempDir: s3://udp-glue-temp-prod-us-east-2/
+      --load_region: APAC
+      --secret_name: udp-src-oracle-kci-prod
+
+  udp-glue-extract-microsiga-api-to-s3:
+    Name: udp-glue-extract-microsiga-api-to-s3
+    Description: "Extracts data from Microsiga API to S3 (LATAM region)"
+    Role: arn:aws:iam::526543738687:role/solvaws-prod-da-udp-glue-service-role
+    GlueVersion: "4.0"
+    WorkerType: G.1X
+    NumberOfWorkers: 2
+    Timeout: 60
+    MaxRetries: 0
+    Command:
+      Name: glueetl
+      ScriptLocation: s3://udp-glue-scripts-prod-us-east-2/scripts/extract_microsiga_api.py
+      PythonVersion: "3"
+    DefaultArguments:
+      --enable-metrics: "true"
+      --enable-continuous-cloudwatch-log: "true"
+      --TempDir: s3://udp-glue-temp-prod-us-east-2/
+      --load_region: LATAM
+      --auth_header_secret: udp_glue_extract_microsiga_api_token
+
+  udp-glue-extract-rtm-to-s3:
+    Name: udp-glue-extract-rtm-to-s3
+    Description: "Extracts RTM data to S3 (uses G.4X / GROUP_3)"
+    Role: arn:aws:iam::526543738687:role/solvaws-prod-da-udp-glue-service-role
+    GlueVersion: "4.0"
+    WorkerType: G.4X
+    NumberOfWorkers: 4
+    Timeout: 180
+    MaxRetries: 1
+    Command:
+      Name: glueetl
+      ScriptLocation: s3://udp-glue-scripts-prod-us-east-2/scripts/extract_rtm.py
+      PythonVersion: "3"
+    DefaultArguments:
+      --enable-metrics: "true"
+      --enable-continuous-cloudwatch-log: "true"
+      --TempDir: s3://udp-glue-temp-prod-us-east-2/
+      --load_region: RTM
