@@ -9,7 +9,7 @@ description = "Detect configuration drift in AWS Glue jobs against a source-of-t
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-  { name = "Pushpalatha58", email = "" }
+  { name = "Pushpalatha58", email = "pushpalathanv12@gmail.com" }
 ]
 keywords = ["aws", "glue", "drift", "data-engineering", "devops", "ci-cd"]
 classifiers = [
